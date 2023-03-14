@@ -1,1 +1,1 @@
-# competitve-programming
+# competitve-programming standard code
