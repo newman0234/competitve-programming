@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+//Euler tour 1
+//Go to node print it.
+// Exit to node print it.
+void dfs(vector<int>adj[],int src,int parent){
+    cout<<src<<" ";
+    for(auto nbr:adj[src]){
+        if(parent!=nbr){
+            dfs(adj,nbr,src);
+        }
+    }
+    cout<<src<<" ";
+}
+int main() {
+    int n;
+    cin>>n;
+    vector<int>adj[1000];
+    for(int i=1;i<=n;i++){
+        int x,y;
+        cin>>x>>y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    dfs(adj,1,-1);
+}
