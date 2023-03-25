@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+//Euler tour 2
+//Go to node print it.
+// Comeback to node and print it.
+int intime[1000]={0};
+int outtime[1000]={0};
+int tme=1;
+void dfs(vector<int>adj[],int src,int parent){
+   // cout<<src<<" ";
+    intime[src]=tme++;
+    for(auto nbr:adj[src]){
+        if(parent!=nbr){
+            dfs(adj,nbr,src);
+            //cout<<src<<" ";
+        }
+    }
+    outtime[src]=tme++;
+   
+}
+int main() {
+    int n;
+    cin>>n;
+    vector<int>adj[1000];
+    for(int i=1;i<=n;i++){
+        int x,y;
+        cin>>x>>y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
+    }
+    dfs(adj,1,-1);
+    for(int i=1;i<=n;i++){
+        cout<<i<<" "<<intime[i]<<" "<<outtime[i]<<endl;
+    }
+}
