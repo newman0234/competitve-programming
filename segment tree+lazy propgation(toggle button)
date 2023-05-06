@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+using namespace std;
+int query(int index,int low,int high,int l,int r,int seg[],int lazy[]){
+       if(lazy[index]!=0){
+        seg[index]=(high-low+1)-seg[index];
+        if(low!=high){
+            if(lazy[2*index+1]==0){
+                lazy[2*index+1]=1;
+            }else{
+                lazy[2*index+1]=0;
+            }
+            if(lazy[2*index+2]==0){
+                lazy[2*index+2]=1;
+            }else{
+                lazy[2*index+2]=0;
+            }
+        }
+        lazy[index]=0;
+    }
+    if(l>high or low>r){
+        return 0;
+    }
+    if(low>=l and r>=high){
+        return seg[index];
+    }
+    int mid=(low+high)>>1;
+    int left=query(2*index+1,low,mid,l,r,seg,lazy);
+    int right=query(2*index+2,mid+1,high,l,r,seg,lazy);
+    return left+right;
+
+}
+void update(int index,int low,int high,int l,int r,int seg[],int lazy[]){
+    // do previous update;
+    if(lazy[index]!=0){
+        seg[index]=(high-low+1)-seg[index];
+        if(low!=high){
+            if(lazy[2*index+1]==0){
+                lazy[2*index+1]=1;
+            }else{
+                lazy[2*index+1]=0;
+            }
+            if(lazy[2*index+2]==0){
+                lazy[2*index+2]=1;
+            }else{
+                lazy[2*index+2]=0;
+            }
+        }
+        lazy[index]=0;
+    }
+    // no overlap  [low high] [l r] and [l r] [low high]
+    if(l>high or low>r){
+        return;
+    }
+    // complete overlap  [l low high r]
+    if(low>=l and r>=high){
+        seg[index]=(high-low+1)-seg[index];
+        if(low!=high){
+               if(lazy[2*index+1]==0){
+                lazy[2*index+1]=1;
+            }else{
+                lazy[2*index+1]=0;
+            }
+            if(lazy[2*index+2]==0){
+                lazy[2*index+2]=1;
+            }else{
+                lazy[2*index+2]=0;
+            }
+        }
+        return;
+    }
+    int mid=(low+high)>>1;
+    update(2*index+1,low,mid,l,r,seg,lazy);
+    update(2*index+2,mid+1,high,l,r,seg,lazy);
+    seg[index]=seg[2*index+1]+seg[2*index+2];   
+}
+int main() {
+    int n,q;
+    cin>>n>>q;
+    int seg[4*n];
+    int lazy[4*n];
+    int len=(4*n)-1;
+    for(int i=0;i<4*n;i++){
+        seg[i]=0;
+        lazy[i]=0;
+    }
+    for(int i=0;i<q;i++){
+        int qu,a,b;
+        cin>>qu>>a>>b;
+        a--;
+        b--;
+        if(qu==1){
+            update(0,0,n-1,a,b,seg,lazy);
+        }else{
+            int res=query(0,0,n-1,a,b,seg,lazy);
+            cout<<res<<endl;
+        }
+    }
+
+}
